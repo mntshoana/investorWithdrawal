@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import za.co.investorWithdrawal.data.domain.ProductInfoResponseDTO;
+import za.co.investorWithdrawal.data.domain.UserInfoResponseDTO;
+import za.co.investorWithdrawal.data.domain.WithdrawalResponseDTO;
 import za.co.investorWithdrawal.service.ProductsService;
 import za.co.investorWithdrawal.service.UserService;
 import za.co.investorWithdrawal.service.WithdrawalService;
@@ -30,19 +33,19 @@ public class Controller {
 
     @GetMapping(value = "api/v1/info",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getInvestorInformation(@RequestBody String userId) {
+    public ResponseEntity<UserInfoResponseDTO> getInvestorInformation(@RequestBody String userId) {
         return userService.getInfo(userId);
     }
 
     @GetMapping(value = "api/v1/product/list",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getProductsInvestorHasInvestedIn(@RequestBody String userId) {
+    public ResponseEntity<ProductInfoResponseDTO> getProductsInvestorHasInvestedIn(@RequestBody String userId) {
         return productsService.getProductList(userId);
     }
 
     @PostMapping(value = "api/v1/product/withdraw",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity withdraw(@RequestBody WithdrawalRequestDTO request) {
+    public ResponseEntity<WithdrawalResponseDTO> withdraw(@RequestBody WithdrawalRequestDTO request) {
         return withdrawalService.withdraw(request);
     }
 }

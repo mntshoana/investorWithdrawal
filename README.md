@@ -13,7 +13,12 @@ git@github.com:mntshoana/investorWithdrawal.git
 cd investorWithdrawal
 mvn clean install
 ````
-then
+then 
 ````
-???
+mvn spring-boot:run
+````
+
+remember to shut down postgres server by running
+````
+pg_ctl stop -D ./src/main/resource/db/investorWithdrawal
 ````
