@@ -17,4 +17,24 @@ public class ResponseUtils {
                 .description("Error! Something went wrong with our system. Please try again later.")
                 .build();
     }
+
+    public static ResponseMessageDTO systemError(String message) {
+        return ResponseMessageDTO.builder()
+                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .description(message)
+                .build();
+    }
+    public static ResponseMessageDTO badRequest(String message) {
+        return ResponseMessageDTO.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .description(message)
+                .build();
+    }
+
+    public static ResponseMessageDTO notFoundError(String message) {
+        return ResponseMessageDTO.builder()
+                .code(HttpStatus.NOT_FOUND.value())
+                .description(message)
+                .build();
+    }
 }

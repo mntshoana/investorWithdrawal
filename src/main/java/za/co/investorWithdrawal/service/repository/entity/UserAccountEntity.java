@@ -5,22 +5,27 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
-@Table(name="userInfo")
-@Entity
+@Table(name="useraccount")
+@Entity(name="useraccount")
 @Getter
 @Setter
-public class UserAccountEntity {
+@Cacheable(false)
+public class UserAccountEntity implements Serializable {
     @Id
-    private String accountNumber;
+    @Column(name="accountnumber")
+    private Long accountNumber;
 
     @NotNull
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "prodId", referencedColumnName = "prodId")
+    @JoinColumn(name = "prodid", referencedColumnName = "prodid")
     private ProductTypeEntity productType;
 
-    @Column(name="balance")
+    @ManyToOne(targetEntity = UserInfoEntity.class)
+    @JoinColumn(name = "userid", referencedColumnName = "id")
+    private UserInfoEntity user;
+
     private BigDecimal balance;
 }

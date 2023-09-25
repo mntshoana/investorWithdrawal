@@ -1,5 +1,6 @@
 package za.co.investorWithdrawal.data.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
@@ -12,8 +13,12 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductInfoResponseDTO {
     @Nullable
-    private List<ProductInfo> list;
+    private List<ProductInfo> productList;
+    @Nullable
     private ResponseMessageDTO response;
+    @Nullable
+    private ResponseMessageDTO error;
 }

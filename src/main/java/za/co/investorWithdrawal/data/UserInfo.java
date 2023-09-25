@@ -1,18 +1,18 @@
 package za.co.investorWithdrawal.data;
 
+import io.micrometer.core.lang.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
-
-import java.util.Date;
 
 @Getter
 @Setter
 @Builder
 public class UserInfo {
-    private String name;
-    private String surname;
-    private Date dateOfBirth;
-    private String email;
-    private String cell;
+    private UserPersonalInfo personal;
+
+    @Nullable
+    private String address;
+
+    private UserContactInfo contact;
 }

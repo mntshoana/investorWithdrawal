@@ -5,21 +5,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
 
-@Table(name="userInfo")
-@Entity
+@Table(name="producttype")
+@Entity(name = "producttype")
 @Getter
 @Setter
-public class ProductTypeEntity {
+public class ProductTypeEntity implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int prodId;
+    @Column(name="prodid")
+    private Integer prodId;
 
     @NotNull
-    @Column(name="type")
     private String type;
 
-    @Column(name="name")
     private String name;
 }

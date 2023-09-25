@@ -1,39 +1,57 @@
 package za.co.investorWithdrawal.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import za.co.investorWithdrawal.data.WithdrawalResponse;
+import za.co.investorWithdrawal.data.WithdrawalResult;
 import za.co.investorWithdrawal.data.domain.WithdrawalRequestDTO;
 import za.co.investorWithdrawal.data.domain.WithdrawalResponseDTO;
-
-import java.math.BigDecimal;
+import za.co.investorWithdrawal.service.repository.UserAccountRepositoryService;
 
 @Service
 public class WithdrawalService {
+    @Autowired
+    UserAccountRepositoryService userAccountRepositoryService;
+
     public ResponseEntity withdraw(WithdrawalRequestDTO request) {
         try {
-            //  return new ResponseEntity<>("{prodId, amount}", HttpStatus.OK);
-            // (if verification success)
-            WithdrawalResponse example = WithdrawalResponse.builder()
-                    .prodId(request.getProdId())
-                    .amount(new BigDecimal(1))
-                    .build();
+            WithdrawalResult result = userAccountRepositoryService.withdraw(request);
+            if (result != null) {
+                if (result.isSuccessful())
+                    return new ResponseEntity<>(WithdrawalResponseDTO.builder()
+                            .prodId(result.getProdId())
+                            .amount(result.getAmount())
+                            .openingBalance(result.getOpeningBalance())
+                            .closingBalance(result.getClosingBalance())
+                            .response(ResponseUtils.successResponse())
+                            .build(), HttpStatus.OK);
+                else if (result.getOpeningBalance() == null)
+                    return new ResponseEntity<>(WithdrawalResponseDTO.builder()
+                            .prodId(result.getProdId())
+                            .amount(result.getAmount())
+                            .errorMessage(ResponseUtils.badRequest(result.getErrorMessage()))
+                            .build(), HttpStatus.BAD_REQUEST);
+                else
+                    return new ResponseEntity<>(WithdrawalResponseDTO.builder()
+                            .prodId(result.getProdId())
+                            .amount(result.getAmount())
+                            .openingBalance(result.getOpeningBalance())
+                            .closingBalance(result.getClosingBalance())
+                            .errorMessage(ResponseUtils.systemError(result.getErrorMessage()))
+                            .build(), HttpStatus.INTERNAL_SERVER_ERROR);
+            } else
+                // result is null == User not found
+                return new ResponseEntity<>(WithdrawalResponseDTO.builder()
+                        .errorMessage(ResponseUtils.notFoundError("Error! Unable to find user with provided id"))
+                        .build(), HttpStatus.NOT_FOUND);
 
-            // else null
-            return new ResponseEntity<>(WithdrawalResponseDTO.builder()
-                    .withdrawn(example)
-                    .response(ResponseUtils.successResponse())
-                    .build(), HttpStatus.OK);
-            // else
-            // return an error "Error! Unable to find user with provided id"
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<WithdrawalResponseDTO>(WithdrawalResponseDTO.builder()
-                    .response(ResponseUtils.systemError())
+            return new ResponseEntity<>(WithdrawalResponseDTO.builder()
+                    .errorMessage(ResponseUtils.systemError())
                     .build(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
