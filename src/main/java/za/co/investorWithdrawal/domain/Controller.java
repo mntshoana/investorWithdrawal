@@ -3,7 +3,6 @@ package za.co.investorWithdrawal.domain;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,8 +17,6 @@ import za.co.investorWithdrawal.data.domain.*;
 import za.co.investorWithdrawal.service.ProductsService;
 import za.co.investorWithdrawal.service.UserService;
 import za.co.investorWithdrawal.service.WithdrawalService;
-
-import javax.validation.constraints.*;
 
 
 @RestController
@@ -38,7 +35,7 @@ public class Controller {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Retrieve a user's personal information")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Success", content = {@Content(schema = @Schema(implementation = UserInfoResponseDTO.class))}),
+            @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "400", description = "Bad Request (invalid input)", content = {@Content(schema = @Schema(implementation = ResponseMessageDTO.class))}),
             @ApiResponse(responseCode = "404", description = "Error! Unable to find user with provided id", content = {@Content(schema = @Schema(implementation = ResponseMessageDTO.class))}),
             @ApiResponse(responseCode = "500", description = "General internal server error", content = {@Content(schema = @Schema(implementation = ResponseMessageDTO.class))})
@@ -53,6 +50,7 @@ public class Controller {
     }
 
     @GetMapping(value = "api/v1/product/list",
+
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Retrieve the list of products a user has invested in")
     @ApiResponses(value = {
@@ -71,6 +69,7 @@ public class Controller {
     }
 
     @PostMapping(value = "api/v1/product/withdraw",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Withdraw an amount from an account")
     @ApiResponses(value = {
