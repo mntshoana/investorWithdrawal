@@ -63,8 +63,11 @@ public class UserAccountRepositoryService {
                 BigDecimal openingBalance = account.getBalance();
 
                 String errorMessage = fullValidation(amount, openingBalance, account);
+                System.out.println("Running!");
+
                 if (errorMessage != null)
                     return makeWithdrawalResultWithError(prodId, randAmount, errorMessage);
+                System.out.println("Running!");
 
                 try {
                     return actionWithdrawal(prodId, amount, openingBalance, account);
@@ -174,13 +177,15 @@ public class UserAccountRepositoryService {
         BigDecimal ninetyPercent = openingBalance.multiply(BigDecimal.valueOf(0.9));
         if (amount.compareTo(ninetyPercent) > 0)
             return "Error! Investors cannot withdraw an amount greater than 90% of their balance";
+        System.out.println("Running!");
 
         // retirement account, age <= 65
         String userProduct = account.getProductType().getType();
         String typeRetirement = ProductType.RETIREMENT.toString();
-        int customerAge = Utils.getAge(account.getUser().getDateOfBirth());
+        long customerAge = Utils.getAge(Utils.localToDate(account.getUser().getDateOfBirth()));
         if (userProduct.equals(typeRetirement) && customerAge <= 65)
             return "Error! You may only withdraw from a retirement type account if you're 66 years or older!";
+        System.out.println("Running!");
 
         return null;
     }

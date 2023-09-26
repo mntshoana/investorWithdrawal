@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import za.co.investorWithdrawal.data.UserContactInfo;
 import za.co.investorWithdrawal.data.UserInfo;
 import za.co.investorWithdrawal.data.UserPersonalInfo;
+import za.co.investorWithdrawal.service.Utils;
 import za.co.investorWithdrawal.service.repository.entity.UserInfoEntity;
 
 import java.text.DateFormat;
@@ -44,7 +45,7 @@ public class UserInfoRepositoryService {
                 .name(user.getFirstName()
                         + ((user.getMiddleName() != null) ? user.getMiddleName() : ""))
                 .surname(user.getLastName())
-                .dateOfBirth(makeDate(user.getDateOfBirth()))
+                .dateOfBirth(makeDate(Utils.localToDate(user.getDateOfBirth())))
                 .build();
     }
     private String makeDate(Date date){

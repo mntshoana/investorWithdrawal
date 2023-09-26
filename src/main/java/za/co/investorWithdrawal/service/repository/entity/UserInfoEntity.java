@@ -6,8 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class UserInfoEntity implements Serializable {
 
     @NotNull
     @Column(name = "dob")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @NotNull
     private String cell;

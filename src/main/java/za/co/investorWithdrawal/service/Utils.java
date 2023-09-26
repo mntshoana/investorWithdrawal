@@ -5,7 +5,10 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class Utils {
@@ -35,7 +38,8 @@ public class Utils {
         symbols.setGroupingSeparator(',');
         symbols.setDecimalSeparator('.');
         formatter.setDecimalFormatSymbols(symbols);
-
+        formatter.setGroupingSize(3);
+        formatter.setGroupingUsed(true);
         return formatter.format(rounded);
     }
 
@@ -46,22 +50,42 @@ public class Utils {
         return String.format("R %s" , value );
     }
     public static String fromBigDecimalToRands(BigDecimal number, int width){
-        String currency = fromBigDecimalToRands(number);
-        int difference = width - currency.length() -1;
-        return String.format("%-" + difference  + "%s" , currency);
+        String currency = fromBigDecimalToCurrency(number);
+        int difference = width -1;
+        String initialFormat = String.format("%d", difference);
+        initialFormat = "%" + initialFormat  + "s";
+        return "R" + String.format(initialFormat, currency);
     }
 
-    public static int getAge(Date dob){
-        Calendar curDate = Calendar.getInstance();
-        Calendar dobAsCalendar = Calendar.getInstance();
-        dobAsCalendar.setTime(dob);
-
-        int potentialYear = dobAsCalendar.get(Calendar.YEAR) - curDate.get(Calendar.YEAR) -1;
-        int potentialDays = dobAsCalendar.get(Calendar.DAY_OF_YEAR) - curDate.get(Calendar.DAY_OF_YEAR);
-        if (potentialDays <= 0){
-            potentialYear += 1;
-        }
-        return potentialYear;
+    public static long getAge(Date dob){
+        System.out.println(dob);
+        LocalDate start = dob.toInstant().atZone(ZoneId.ofOffset("UTC", ZoneOffset.UTC)).toLocalDate();
+        LocalDate now = localNow();
+        long years = ChronoUnit.YEARS.between(start, now);
+//        long days = ChronoUnit.DAYS.between(now, start);
+//
+//        int daysInAYear = 365;
+//        if (now.isLeapYear())
+//            daysInAYear = 364;
+//
+//        if (days >= daysInAYear)
+//            years +=1;
+//        else if (days >= 365)
+//            years += 1;
+        System.out.println("Years: " + years);
+        return years;
     }
 
+    public static LocalDate localNow(){
+        return LocalDate.now(ZoneId.ofOffset("UTC", ZoneOffset.UTC));
+    }
+
+    public static Date now(){
+        return  Date.from(localNow().atStartOfDay().toInstant(ZoneOffset.UTC));
+    }
+
+    public static Date localToDate(LocalDate date){
+        return Date.from(date.atStartOfDay().toInstant(ZoneOffset.UTC));
+
+    }
 }
