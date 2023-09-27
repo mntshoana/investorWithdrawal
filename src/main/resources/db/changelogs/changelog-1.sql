@@ -12,5 +12,9 @@ INSERT INTO userInfo (firstName, lastName, dob, cell, email,
                      VALUES ('Lebohang', 'Sethole', '1999-11-10', '0519995454', 'lebo.sethole@yahee.com',
                      '27 Church Street', 'Fluerdale', 'Amininka', '777034');
 
-INSERT INTO productType (prodId, type, name) VALUES (0, 'RETIREMENT', 'OMNI Retirement Account');
-INSERT INTO productType (prodId, type, name) VALUES (1, 'SAVINGS', 'True Savings Account');
+INSERT INTO productType (prodId, type, description) VALUES (0, 'RETIREMENT', 'OMNI Retirement Account');
+INSERT INTO productType (prodId, type, description) VALUES (1, 'SAVINGS', 'True Savings Account');
+
+INSERT INTO withdrawalStatusType (statusId, description) VALUES (0, 'STARTED');
+INSERT INTO withdrawalStatusType (statusId, description) VALUES (1, 'EXECUTING');
+INSERT INTO withdrawalStatusType (statusId, description) VALUES (2, 'DONE');

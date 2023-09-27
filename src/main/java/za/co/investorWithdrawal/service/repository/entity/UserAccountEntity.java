@@ -27,5 +27,6 @@ public class UserAccountEntity implements Serializable {
     @JoinColumn(name = "userid", referencedColumnName = "id")
     private UserInfoEntity user;
 
+    @NotNull
     private BigDecimal balance;
 }

@@ -1,4 +1,4 @@
-package za.co.investorWithdrawal.data;
+package za.co.investorWithdrawal.constants;
 
 public enum ProductType {
     RETIREMENT, SAVINGS;

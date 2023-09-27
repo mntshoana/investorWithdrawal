@@ -12,6 +12,7 @@ import org.springframework.lang.Nullable;
 public class WithdrawalResult {
     private boolean isSuccessful;
     private Long prodId;
+    @Nullable
     private String amount;
     @Nullable
     private String openingBalance;

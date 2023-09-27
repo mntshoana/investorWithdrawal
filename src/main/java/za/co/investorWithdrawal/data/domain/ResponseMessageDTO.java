@@ -2,6 +2,9 @@ package za.co.investorWithdrawal.data.domain;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,6 +20,13 @@ public class ResponseMessageDTO {
             required = true
     )
     private String description;
+
+    @Schema(
+            type = "timestamp",
+            required = true
+    )
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDateTime timestamp;
 }
 
 

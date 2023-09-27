@@ -18,7 +18,13 @@ then
 mvn spring-boot:run
 ````
 
+## Once done
 remember to shut down postgres server by running
 ````
-pg_ctl stop -D ./src/main/resource/db/investorWithdrawal
+pg_ctl stop -D ./src/main/resources/db/investorWithdrawal
+````
+
+You may also delete the database files by running (on linux/mac)
+````
+rm -rfd ./src/main/resources/db/investorWithdrawal
 ````

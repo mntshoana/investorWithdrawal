@@ -22,11 +22,12 @@ import za.co.investorWithdrawal.service.WithdrawalService;
 @RestController
 public class Controller {
 
-    @Autowired
-    UserService userService;
 
     @Autowired
     ProductsService productsService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     WithdrawalService withdrawalService;
@@ -78,9 +79,7 @@ public class Controller {
             @ApiResponse(responseCode = "404", description = "Error! Unable to find user with provided id", content = {@Content(schema = @Schema(implementation = ResponseMessageDTO.class))}),
             @ApiResponse(responseCode = "500", description = "General internal server error", content = {@Content(schema = @Schema(implementation = ResponseMessageDTO.class))})
     })
-    public ResponseEntity<WithdrawalResponseDTO> withdraw(@RequestBody
-
-                                                                  WithdrawalRequestDTO request) {
+    public ResponseEntity<WithdrawalResponseDTO> withdraw(@RequestBody WithdrawalRequestDTO request) {
         return withdrawalService.withdraw(request);
     }
 }

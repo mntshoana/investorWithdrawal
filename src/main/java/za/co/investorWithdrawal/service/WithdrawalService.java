@@ -9,16 +9,18 @@ import org.springframework.http.ResponseEntity;
 import za.co.investorWithdrawal.data.WithdrawalResult;
 import za.co.investorWithdrawal.data.domain.WithdrawalRequestDTO;
 import za.co.investorWithdrawal.data.domain.WithdrawalResponseDTO;
-import za.co.investorWithdrawal.service.repository.UserAccountRepositoryService;
+import za.co.investorWithdrawal.service.repository.WithdrawalRepositoryService;
+
 
 @Service
 public class WithdrawalService {
     @Autowired
-    UserAccountRepositoryService userAccountRepositoryService;
+    WithdrawalRepositoryService withdrawalRepositoryService;
+
 
     public ResponseEntity withdraw(WithdrawalRequestDTO request) {
         try {
-            WithdrawalResult result = userAccountRepositoryService.withdraw(request);
+            WithdrawalResult result = withdrawalRepositoryService.withdraw(request);
             if (result != null) {
                 if (result.isSuccessful())
                     return new ResponseEntity<>(WithdrawalResponseDTO.builder()

@@ -20,5 +20,6 @@ public class ProductTypeEntity implements Serializable {
     @NotNull
     private String type;
 
-    private String name;
+    @NotNull
+    private String description;
 }

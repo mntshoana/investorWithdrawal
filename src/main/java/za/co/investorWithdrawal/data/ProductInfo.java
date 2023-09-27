@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
 import za.co.investorWithdrawal.constants.Constants;
+import za.co.investorWithdrawal.constants.ProductType;
 
 @Getter
 @Setter

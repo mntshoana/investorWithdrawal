@@ -10,8 +10,6 @@ import za.co.investorWithdrawal.service.repository.entity.UserInfoEntity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Optional;
 
@@ -19,7 +17,7 @@ import java.util.Optional;
 public class UserInfoRepositoryService {
 
     @Autowired
-    UserInfoRepository userInfoRepository;
+    private UserInfoRepository userInfoRepository;
 
     public UserInfo getUser(Long userId) {
         Optional<UserInfoEntity> possibleUser = userInfoRepository.findById(userId);
@@ -50,8 +48,7 @@ public class UserInfoRepositoryService {
     }
     private String makeDate(Date date){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String strDate = dateFormat.format(date);
-        return (strDate);
+        return dateFormat.format(date);
     }
 
     private String makeAddress(UserInfoEntity user) {

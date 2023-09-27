@@ -1,8 +1,8 @@
 package za.co.investorWithdrawal;
 
-import com.sun.istack.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import za.co.investorWithdrawal.constants.ProductType;
 import za.co.investorWithdrawal.data.*;
 import za.co.investorWithdrawal.data.domain.*;
 import za.co.investorWithdrawal.service.Utils;
@@ -11,7 +11,6 @@ import za.co.investorWithdrawal.service.repository.entity.UserAccountEntity;
 import za.co.investorWithdrawal.service.repository.entity.UserInfoEntity;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,13 +76,13 @@ public class TestUtils {
     }
 
     public static ResponseEntity<WithdrawalResponseDTO> makeWithdrawalResponse(WithdrawalRequestDTO request) {
-        BigDecimal openningBalance = new BigDecimal("965985");
-        BigDecimal closingbalance = openningBalance.subtract(Utils.fromStringToBigDecimal(request.getAmount()));
+        BigDecimal openingBalance = new BigDecimal("965985");
+        BigDecimal closingBalance = openingBalance.subtract(Utils.fromStringToBigDecimal(request.getAmount()));
         return new ResponseEntity(WithdrawalResponseDTO.builder()
                 .prodId(787890901111L)
                 .amount("R " + request.getAmount())
-                .openingBalance(Utils.fromBigDecimalToRands(openningBalance))
-                .closingBalance(Utils.fromBigDecimalToRands(closingbalance))
+                .openingBalance(Utils.fromBigDecimalToRands(openingBalance))
+                .closingBalance(Utils.fromBigDecimalToRands(closingBalance))
                 .response(makeSuccessResponse())
                 .build(),
                 HttpStatus.OK);
@@ -95,7 +94,7 @@ public class TestUtils {
         entity.setFirstName("Thabo");
         entity.setMiddleName("Thube");
         entity.setLastName("Lebopo");
-        entity.setDateOfBirth(LocalDate.of(1994,05,06));
+        entity.setDateOfBirth(LocalDate.of(1994,5,6));
         entity.setCell("0123456789");
         entity.setEmail("test@email.com");
         entity.setAddressLine1("2nd Street");
@@ -124,7 +123,7 @@ public class TestUtils {
         ProductTypeEntity entity = new ProductTypeEntity();
         entity.setProdId(1);
         entity.setType(ProductType.SAVINGS.toString());
-        entity.setName("Test savings account");
+        entity.setDescription("Test savings account");
         return entity;
     }
 }

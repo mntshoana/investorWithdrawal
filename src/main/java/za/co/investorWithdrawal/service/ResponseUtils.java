@@ -8,6 +8,7 @@ public class ResponseUtils {
         return ResponseMessageDTO.builder()
                 .code(HttpStatus.OK.value())
                 .description("Success")
+                .timestamp(Utils.localTimeNow())
                 .build();
     }
 
@@ -15,6 +16,7 @@ public class ResponseUtils {
         return ResponseMessageDTO.builder()
                 .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .description("Error! Something went wrong with our system. Please try again later.")
+                .timestamp(Utils.localTimeNow())
                 .build();
     }
 
@@ -22,12 +24,14 @@ public class ResponseUtils {
         return ResponseMessageDTO.builder()
                 .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .description(message)
+                .timestamp(Utils.localTimeNow())
                 .build();
     }
     public static ResponseMessageDTO badRequest(String message) {
         return ResponseMessageDTO.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
                 .description(message)
+                .timestamp(Utils.localTimeNow())
                 .build();
     }
 
@@ -35,6 +39,7 @@ public class ResponseUtils {
         return ResponseMessageDTO.builder()
                 .code(HttpStatus.NOT_FOUND.value())
                 .description(message)
+                .timestamp(Utils.localTimeNow())
                 .build();
     }
 }

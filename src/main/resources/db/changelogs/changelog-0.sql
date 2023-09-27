@@ -1,8 +1,14 @@
 CREATE TABLE productType (
     prodId INT NOT NULL,
-    type VARCHAR(10),
-    name VARCHAR(30),
+    type VARCHAR(10) NOT NULL,
+    description VARCHAR(30) NOT NULL,
     PRIMARY KEY(prodId)
+);
+
+CREATE TABLE withdrawalStatusType (
+    statusId INT NOT NULL,
+    description VARCHAR(10) NOT NULL,
+    PRIMARY KEY(statusId)
 );
 
 
@@ -29,7 +35,21 @@ CREATE TABLE userAccount(
    accountNumber BIGSERIAL NOT NULL,
    prodId INT NOT NULL,
    userId BIGINT NOT NULL,
-   balance DECIMAL,
+   balance DECIMAL NOT NULL,
+
    PRIMARY KEY (accountNumber),
    FOREIGN KEY (prodId) REFERENCES productType(prodId)
+);
+
+CREATE TABLE withdrawal (
+    id BIGSERIAL NOT NULL,
+    accountNumber BIGINT NOT NULL,
+    status INT NOT NULL,
+    created TIMESTAMP WITHOUT TIME ZONE,
+    modified  TIMESTAMP WITHOUT TIME ZONE,
+    amount DECIMAL NOT NULL,
+
+    PRIMARY KEY(id),
+    FOREIGN KEY (accountNumber) REFERENCES userAccount(accountNumber),
+    FOREIGN KEY (status) REFERENCES withdrawalStatusType(statusId)
 );
