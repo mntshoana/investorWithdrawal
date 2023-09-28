@@ -18,3 +18,4 @@ INSERT INTO productType (prodId, type, description) VALUES (1, 'SAVINGS', 'True 
 INSERT INTO withdrawalStatusType (statusId, description) VALUES (0, 'STARTED');
 INSERT INTO withdrawalStatusType (statusId, description) VALUES (1, 'EXECUTING');
 INSERT INTO withdrawalStatusType (statusId, description) VALUES (2, 'DONE');
+INSERT INTO withdrawalStatusType (statusId, description) VALUES (3, 'FAILED');

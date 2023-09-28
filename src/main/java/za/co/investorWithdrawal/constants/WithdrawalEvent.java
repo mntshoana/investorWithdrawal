@@ -19,8 +19,13 @@ public enum WithdrawalEvent {
     @Setter
     private Long withdrawalId;
 
+    @Getter
+    @Setter
+    private Long userId;
+
     WithdrawalEvent() {
         this.amount = null;
         this.prodId = null;
+        this.userId = null;
     }
 }

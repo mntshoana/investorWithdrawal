@@ -33,10 +33,11 @@ public class Scheduler {
     }
 
 
-    public static void schedule(BigDecimal amount, Long prodId) {
+    public static void schedule(Long userId, BigDecimal amount, Long prodId) {
         Scheduler scheduler = getScheduler();
         scheduler.withdrawalStStateMachine.getStateMachine().startReactively().subscribe();
         WithdrawalEvent event = WithdrawalEvent.START;
+        event.setUserId(userId);
         event.setProdId(prodId);
         event.setAmount(amount);
         scheduler.withdrawalStStateMachine.getStateMachine().sendEvent(Mono.just(MessageBuilder

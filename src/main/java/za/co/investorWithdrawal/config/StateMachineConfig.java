@@ -61,7 +61,7 @@ public class StateMachineConfig
                 .event(WithdrawalEvent.START)
                 .target(WithdrawalState.STARTED)
                 .action(context -> {
-                    withdrawalRepositoryService.onStart(context.getEvent().getProdId(), context.getEvent().getAmount());
+                    withdrawalRepositoryService.onStart(context.getEvent().getUserId(), context.getEvent().getProdId(), context.getEvent().getAmount());
                     Scheduler.execute(context.getStateMachine());
                 }, errorContext -> {
                     System.out.println("[STATE ERROR]: Could not proceed with withdrawal for account: " + errorContext.getEvent().getProdId());

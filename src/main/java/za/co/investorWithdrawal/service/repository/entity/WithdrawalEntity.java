@@ -45,6 +45,10 @@ public class WithdrawalEntity implements Serializable {
     @NotNull
     private BigDecimal amount;
 
+   @NotNull
+   @Column(name="previousbalance")
+    private BigDecimal previousBalance;
+
     @PrePersist
     public void onPrePersist() {
         setCreated(Utils.localTimeNow());

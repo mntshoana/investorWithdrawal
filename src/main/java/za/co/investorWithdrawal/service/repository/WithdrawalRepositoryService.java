@@ -35,19 +35,19 @@ public class WithdrawalRepositoryService {
     private WithdrawalStatusTypeRepository withdrawalStatusTypeRepository;
 
 
-    //    @Modifying(clearAutomatically = true)
-    @Transactional
+    @Transactional(readOnly = true)
     public WithdrawalResult withdraw(WithdrawalRequestDTO request) {
-        Optional<UserInfoEntity> possibleUser = userInfoRepository.findById(request.getUserId());
+        Long userId = request.getUserId();
+        Optional<UserInfoEntity> possibleUser = userInfoRepository.findById(userId);
         if (possibleUser.isEmpty()) {
             return null;
         }
 
         Long prodId = request.getProdId();
-        Optional<UserAccountEntity> possibleAccount = userAccountRepository.findById(prodId);
+        Optional<UserAccountEntity> possibleAccount = userAccountRepository.findBy(userId, prodId);
         if (possibleAccount.isEmpty()) {
             return makeWithdrawalResultWithError(prodId,
-                    "Error! Unable to find an associated account with the provided prodId");
+                    "Error! Unable to find an associated account with the provided userId and prodId");
         }
 
         UserAccountEntity account = possibleAccount.get();
@@ -61,7 +61,7 @@ public class WithdrawalRepositoryService {
         BigDecimal amount = Utils.fromStringToBigDecimal(request.getAmount());
         String randAmount = Utils.fromBigDecimalToRands(amount);
         try {
-            return scheduleWithdrawal(prodId, amount, account);
+            return scheduleWithdrawal(userId, prodId, amount, account);
         } catch (Exception e) {
             e.printStackTrace();
             return makeWithdrawalResultWithError(prodId, randAmount,
@@ -72,13 +72,13 @@ public class WithdrawalRepositoryService {
 
 
     // -----------------------------------UTILS------------------------------------
-    protected WithdrawalResult scheduleWithdrawal(Long prodId,
+    protected WithdrawalResult scheduleWithdrawal(Long userId, Long prodId,
                                                   final BigDecimal amount,
                                                   UserAccountEntity account) {
         BigDecimal openingBalance = account.getBalance();
         BigDecimal closingBalance = openingBalance.subtract(amount);
 
-        Scheduler.schedule(amount, prodId);
+        Scheduler.schedule(userId, amount, prodId);
 
         String randAmount = Utils.fromBigDecimalToRands(amount);
         return WithdrawalResult.builder()
@@ -90,12 +90,13 @@ public class WithdrawalRepositoryService {
                 .build();
     }
 
-    @Transactional
     @Modifying(clearAutomatically = true)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     private WithdrawalEntity initiateWithdrawalEntityWithStatusStarted(BigDecimal amount, UserAccountEntity account) {
         WithdrawalEntity transaction = new WithdrawalEntity();
         transaction.setAccount(account);
         transaction.setAmount(amount);
+        transaction.setPreviousBalance(account.getBalance());
         Optional<WithdrawalStatusTypeEntity> type = withdrawalStatusTypeRepository.findById(WithdrawalState.STARTED.ordinal());
         if (!type.isPresent())
             throw new RuntimeException("Withdrawal type STARTED cannot be found!");
@@ -104,12 +105,12 @@ public class WithdrawalRepositoryService {
     }
 
     @Modifying(clearAutomatically = true)
-    @Transactional
-    public void onStart(Long prodId, BigDecimal amount) {
-        Optional<UserAccountEntity> possibleAccount = userAccountRepository.findById(prodId);
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void onStart(Long userId, Long prodId, BigDecimal amount) {
+        Optional<UserAccountEntity> possibleAccount = userAccountRepository.findBy(userId,prodId);
 
         if (possibleAccount.isEmpty())
-            throw new RuntimeException("Error! Unable to ");
+            throw new RuntimeException("Error! Unable to find account");
 
         UserAccountEntity account = possibleAccount.get();
         WithdrawalEntity transaction = initiateWithdrawalEntityWithStatusStarted(amount, account);
@@ -133,7 +134,9 @@ public class WithdrawalRepositoryService {
         for (WithdrawalEntity transaction : transactionList) {
             BigDecimal openingBalance = transaction.getAccount().getBalance();
             BigDecimal closingBalance = openingBalance.subtract(transaction.getAmount());
-            transaction.getAccount().setBalance(closingBalance);
+            String amount = Utils.fromBigDecimalToCurrency(transaction.getAmount());
+            if (fullValidation(amount, transaction.getAccount()) == null)
+                transaction.getAccount().setBalance(closingBalance);
             transaction.setStatus(type.get());
         }
 
@@ -147,12 +150,18 @@ public class WithdrawalRepositoryService {
         if (transactionList.size() == 0)
             return;
 
-        Optional<WithdrawalStatusTypeEntity> type = withdrawalStatusTypeRepository.findById(WithdrawalState.DONE.ordinal());
-        if (type.isEmpty())
-            throw new RuntimeException("Withdrawal type DONE cannot be found!");
+        Optional<WithdrawalStatusTypeEntity> typeSuccess = withdrawalStatusTypeRepository.findById(WithdrawalState.DONE.ordinal());
+        Optional<WithdrawalStatusTypeEntity> typeFailed = withdrawalStatusTypeRepository.findById(WithdrawalState.DONE.ordinal());
+        if (typeSuccess.isEmpty() || typeFailed.isEmpty())
+            throw new RuntimeException("Withdrawal type DONE/FAILED cannot be found!");
 
         for (WithdrawalEntity transaction : transactionList) {
-            transaction.setStatus(type.get());
+            BigDecimal previousBalance = transaction.getPreviousBalance();
+            BigDecimal closingBalance = transaction.getAccount().getBalance();
+            if (previousBalance.equals(closingBalance))
+                transaction.setStatus(typeFailed.get());
+            else
+                transaction.setStatus(typeSuccess.get());
         }
         withdrawalRepository.saveAllAndFlush(transactionList);
     }

@@ -48,6 +48,7 @@ CREATE TABLE withdrawal (
     created TIMESTAMP WITHOUT TIME ZONE,
     modified  TIMESTAMP WITHOUT TIME ZONE,
     amount DECIMAL NOT NULL,
+    previousBalance DECIMAL NOT NULL,
 
     PRIMARY KEY(id),
     FOREIGN KEY (accountNumber) REFERENCES userAccount(accountNumber),
