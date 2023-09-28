@@ -19,8 +19,8 @@
         <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <script.executor>.bat</script.executor>
-        <script.script>postgres.bat</script.script>
+        <script.executor>placeholder</script.executor>
+        <script.script>placeholder</script.script>
     </properties>
 
     <profiles>
@@ -32,8 +32,10 @@
                 </os>
             </activation>
             <properties>
-                <script.executor>bat</script.executor>
-                <script.script>postgres.bat</script.script>
+                <!--hangs on pg_ctl start as process cannot be detached from script on windows-->
+                <script.executor>cmd</script.executor>
+<!--                <script.script>start /min cmd.exe /c .\postgres.bat</script.script>-->
+            <script.script>echo "Don't forget to manually run postgres script at least once"</script.script>
             </properties>
         </profile>
         <profile>

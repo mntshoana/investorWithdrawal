@@ -43,6 +43,7 @@ then
   createIfNotExist
   runServerIfNotUp
   createDatabaseIfNotExist
+  rm result
 else
   echo "You don't have PostgreSQL installed."
   echo "Please install it and try running this command again."
