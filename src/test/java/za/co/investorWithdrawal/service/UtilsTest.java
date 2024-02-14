@@ -8,8 +8,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 
 @ActiveProfiles("test")
@@ -40,13 +38,10 @@ public class UtilsTest {
     public void getAgeTest() throws ParseException {
 
         Date dateNow = Utils.now();
-        LocalDate date1Local = Utils.localNow();
-        int daysInAYear = 365;
-        if (date1Local.isLeapYear())
-            daysInAYear = 364;
+        LocalDate date1Local = Utils.dateToLocalDate(dateNow).minusYears(1);
 
-        Date dateLastYear = Utils.localToDate(date1Local.minusDays(daysInAYear));
-        Date dateLastYearPlusOne = Utils.localToDate(date1Local.minusDays(daysInAYear -1));
+        Date dateLastYear = Utils.localToDate(date1Local);
+        Date dateLastYearPlusOne = Utils.localToDate(date1Local.plusDays(1));
 
         assert(Utils.getAge(dateNow) == 0);
         assert(Utils.getAge(dateLastYear) == 1);

@@ -24,7 +24,7 @@ public class Utils {
             symbols.setGroupingSeparator(',');
             symbols.setDecimalSeparator('.');
             String pattern = "#,###.##";
-            DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+            DecimalFormat decimalFormat = new DecimalFormat(pattern);
             decimalFormat.setDecimalFormatSymbols(symbols);
 
             decimalFormat.setParseBigDecimal(true);
@@ -64,7 +64,7 @@ public class Utils {
     }
 
     public static long getAge(Date dob) {
-        LocalDate start = dob.toInstant().atZone(ZoneId.ofOffset("UTC", ZoneOffset.UTC)).toLocalDate();
+        LocalDate start = dateToLocalDate(dob);
         LocalDate now = localNow();
         long years = ChronoUnit.YEARS.between(start, now);
 
@@ -86,5 +86,12 @@ public class Utils {
 
     public static LocalDateTime localTimeNow() {
         return LocalDateTime.now(ZoneId.ofOffset("UTC", ZoneOffset.UTC));
+    }
+
+    public static LocalDate dateToLocalDate(Date date){
+        return date.toInstant().atZone(ZoneId.ofOffset("UTC", ZoneOffset.UTC)).toLocalDate();
+    }
+    public static LocalDateTime dateToLocalDateTime(Date date){
+        return date.toInstant().atZone(ZoneId.ofOffset("UTC", ZoneOffset.UTC)).toLocalDateTime();
     }
 }
