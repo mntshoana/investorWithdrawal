@@ -18,14 +18,14 @@ cd investorWithdrawal
 mvn clean install
 ````
 
-NOTE (FOR WINDOWS USERS)
+NOTE (WINDOWS USERS)
 Make sure to manually run .\postgres.bat from a 'cmd" terminal (not powershell). It has been excluded from the antrun script
 ````
 cmd start /min cmd.exe /c .\postgres.bat
 ````
 
 
-Following this (FOR MAC AND WINDOWS), run the app using
+Following this (MAC, LINUX AND WINDOWS), run the app using
 ````
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ````
