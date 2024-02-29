@@ -27,26 +27,16 @@ cmd start /min cmd.exe /c .\postgres.bat
 
 Following this (MAC, LINUX AND WINDOWS), run the app using
 ````
-mvn spring-boot:run -Dspring-boot.run.profiles=dev
+mvn clean install
+java -jar target/app-1.jar --spring.h2.console.enabled=true --spring.profiles.active=dev 
 ````
 
 You may now head to http://127.0.0.1:8443/swagger-ui/index.html to test the api from swagger
+You may also go to http://127.0.0.1:8443/h2-console to get a view of the in memory database
 
-## Once done
-remember to shut down postgres server by running
-````
-pg_ctl stop -D ./src/main/resources/db/investorWithdrawal
-````
-(on windows)
-````
-pg_ctl stop -D .\src\main\resources\db\investorWithdrawal
-````
+h2 user name: sa
+h2 password: admin
 
-You may also delete the database files by running (on linux/mac)
-````
-rm -rfd ./src/main/resources/db/investorWithdrawal
-````
-(on windows)
-````
-rmdir .\src\main\resources\db\investorWithdrawal
-````
+you may test the api using
+userId: 2
+prodId: 484757332949

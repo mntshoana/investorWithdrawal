@@ -64,13 +64,13 @@ public class WithdrawalController {
                                                                       example = "2", required = true,
                                                                       pattern = Constants.NUMBER_REGEX)
                                                               @RequestParam Long prodId,
-                                                          @Parameter(description = "prodId to be searched")
+                                                          @Parameter(description = "Date lower-bound to be used to filter")
                                                               @Schema(type = "date",
                                                                       example = "01/01/2022", required = false
                                                                      )
                                                               @Nullable
                                                               @RequestParam Date dateFrom,
-                                                          @Parameter(description = "prodId to be searched")
+                                                          @Parameter(description = "Date upper-bound to be used to filter")
                                                               @Schema(type = "date",
                                                                       example = "01/01/2022", required = false
                                                                      )
