@@ -43,6 +43,7 @@ CREATE TABLE userAccount(
 
 CREATE TABLE withdrawal (
     id BIGSERIAL NOT NULL,
+    userId BIGINT NOT NULL,
     accountNumber BIGINT NOT NULL,
     status INT NOT NULL,
     created TIMESTAMP WITHOUT TIME ZONE,

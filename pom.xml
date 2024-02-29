@@ -19,38 +19,7 @@
         <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <script.executor>placeholder</script.executor>
-        <script.script>placeholder</script.script>
     </properties>
-
-    <profiles>
-        <profile>
-            <id>Windows</id>
-            <activation>
-                <os>
-                    <family>Windows</family>
-                </os>
-            </activation>
-            <properties>
-                <!--hangs on pg_ctl start as process cannot be detached from script on windows-->
-                <script.executor>cmd</script.executor>
-<!--                <script.script>start /min cmd.exe /c .\postgres.bat</script.script>-->
-            <script.script>echo "Don't forget to manually run postgres script at least once"</script.script>
-            </properties>
-        </profile>
-        <profile>
-            <id>unix</id>
-            <activation>
-                <os>
-                    <family>unix</family>
-                </os>
-            </activation>
-            <properties>
-                <script.executor>sh</script.executor>
-                <script.script>postgres.sh</script.script>
-            </properties>
-        </profile>
-    </profiles>
 
     <dependencies>
         <dependency>
@@ -73,9 +42,8 @@
             <version>2.7.15-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.6.0</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
         <!-- schema -->
@@ -152,27 +120,6 @@
                     <source>11</source>  <!-- same as <java.version> -->
                     <target>11</target>    <!-- same as <java.version> -->
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.3</version>
-                <executions>
-                    <execution>
-                        <id>generateSources</id>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <tasks>
-                                <exec executable="${script.executor}">
-                                    <arg value="${script.script}"/>
-                                </exec>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
